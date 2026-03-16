@@ -15,7 +15,7 @@ public class Ex08{
                                         contaMinuscula++;// se for letra minuscula, conta
                                 }
 
-                                if (c >= '0' && c>= '9'){
+                                if (c >= '0' && c<= '9'){
                                         contaNumero++;// se for numero, conta
                                 }
 

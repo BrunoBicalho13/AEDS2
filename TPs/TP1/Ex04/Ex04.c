@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<locale.h>
 
 int tamanhoString(char string[])
 {
@@ -47,23 +48,30 @@ int comparaString(char string1[], char string2[])
 void inverteString(char str[])
 {
 	int tamanho = tamanhoString(str);
-	for(int i = tamanho; i >= 0; i--){
+	for(int i = tamanho - 1; i >= 0; i--){
+		if(str[i] == '~' || str[i] == 'ç' || str[i] == '`' || str[i] == '^'){
+			printf("%c %c",str[i + 1],str[i]);
+		}
+		
 		printf("%c",str[i]);
 	}
 
 	printf("\n");
 	
-
+	
 }
 
 
 int main(){
-	char *string = (char*)malloc(2000 * sizeof(char));
-	scanf("%[^\n]",string);getchar();
+	setlocale(LC_ALL,"");
+	char *string1 = (char*)malloc(2000 * sizeof(char));
 
-	while(comparaString(string,"FIM") == 0){
-		inverteString(string);
-		scanf("%[^\n]",string);getchar();
+
+	scanf("%[^\n]",string1);getchar();
+
+	while(comparaString(string1,"FIM") == 0){
+		inverteString(string1);
+		scanf("%[^\n]",string1);getchar();
 	}
 }	
 	
