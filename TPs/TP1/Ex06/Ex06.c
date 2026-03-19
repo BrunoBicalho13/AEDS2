@@ -88,7 +88,7 @@ int main()
         }
         else
         {
-            printf("NAO\n");
+            printf("NÃO\n");
         }
 
         scanf("%s", str1);

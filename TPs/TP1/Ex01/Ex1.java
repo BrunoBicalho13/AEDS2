@@ -5,7 +5,7 @@ public class Ex1 {
 
     	for(int i = 0; i < str1.length(); i++){
         	char c = str1.charAt(i);
-		resp += (char)(str1.charAt(i) + 3); // atribuição com casting ( estava retornando int antes)
+		resp += (char)(c + 3); // atribuição com casting ( estava retornando int antes)
    	 }
 
    	 return resp;
@@ -38,7 +38,7 @@ public class Ex1 {
 
         while(compara(str1,"FIM") == 0){ // While para enquanto strings sao diferentes de FIM
             str2 = cifra(str1); // cifro
-            System.out.println(str2); // printo
+            MyIO.println(str2); // printo
             str1 = MyIO.readLine(); // escaneio a proxima string
         }
     }

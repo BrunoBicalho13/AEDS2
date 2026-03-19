@@ -102,7 +102,7 @@ public class Ex03{
 			if (X1 == true){
 				str1 = "SIM";
 			}else{
-				str1 = "NÃO";
+				str1 = "NAO";
 			}
 
 
@@ -110,7 +110,7 @@ public class Ex03{
 			if (X2 == true){
                                 str2 = "SIM";
                         }else{
-                                str2 = "NÃO";
+                                str2 = "NAO";
                         }
 
 		
@@ -118,14 +118,14 @@ public class Ex03{
 			if (X3  == true){
                                 str3 = "SIM";
                         }else{
-                                str3 = "NÃO";
+                                str3 = "NAO";
                         }
 
 			boolean X4 = real(str);
 			if (X4 == true){
                                 str4 = "SIM";
                         }else{
-                                str4 = "NÃO";
+                                str4 = "NAO";
                         }
 
 			System.out.println(str1 + " " + str2 + " " + str3 + " " + str4); // Saida com as strings SIM ou NÃO  
