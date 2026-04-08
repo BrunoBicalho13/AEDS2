@@ -8,8 +8,10 @@ public class Hora{
 	}
 
 	Hora(int hora, int minuto){
-		this.hora = hora;
-		this.minuto = minuto;
+		if(hora >= 0 && hora <= 23)
+			this.hora = hora;
+		if(minuto >= 0 && minuto <=59)
+			this.minuto = minuto;
 	}
 
 	public int getHora(){
@@ -20,7 +22,7 @@ public class Hora{
 		return this.minuto
 	}
 	
-	public String formatar(){
+	public String formatarHora(){
                 String horario = string.format("%d : %d", this.hora, this.minuto);
                 return horario;
         }

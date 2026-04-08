@@ -63,7 +63,7 @@ public class Restaurante{
 		return this.avaliacao;
 	}
 
-	public String getTiposCozinha(){
+	public String[] getTiposCozinha(){
 		return this.tiposCozinha;
 	}
 
@@ -82,12 +82,26 @@ public class Restaurante{
 	public boolean getAberto(){
 		return this.aberto;
 	}
-
-	public static Restaurante parseRestaurante(String s){
-		return Restaurante;
+	
+	public String transformaFaixaPreco(){
+		if(this.faixaPreco == 1){
+			return "$";
+		}else if(this.faixaPreco == 2){
+			return "$$";
+		}else if(this.faixaPreco == 3){
+			return "$$$";
+		}else if(this.faixaPreco== 4){
+			return "$$$$";
+		}
+			
 	}
 
+	public static Restaurante parseRestaurante(String s){
+		// pode usar split?
+	}
 	public String formatar(){
-		return "aaaaaaa";
+		String rest = string.format("[ %d ## %s ## %d ## %f ## %s ## %s ## %s-%s ## %s ## %b]", this.id, this.nome, this.capaciadde, this.avaliacao, Arrays.toString(this.TiposCozinha), this.faixaPreco.transformaFaixaPreco, this.horaAbertura.formatarHora(), this.horaFechamento.formatarHora(), this.dataAbertura.formatarData(), this.aberto);
+
+		return rest;
 	}
 } 

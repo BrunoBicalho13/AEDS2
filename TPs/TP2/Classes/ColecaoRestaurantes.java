@@ -10,27 +10,53 @@ public class ColecaoRestaurantes{
 
 	ColecaoRestaurantes(int tamanho, Restaurante[] restaurantes){
 		this.tamanho = tamanho;
-		this.restaurantes = restaurantes;
+		this.restaurantes = restaurantes[0];
 	}
 
-	public void setRestaurante(Restaurante rest){
-		this.restaurante = rest;
+	public void setTamanho(int tamanho){
+		this.tamaho = tamanho;
+	}
+
+	public void setRestaurante(Restaurante[] rest){
+		this.restaurantes = rest;
+	}
+
+	public int getTamanho(){
+		return this.tamanho;
+	}
+
+	public Restaurante[] getRestaurantes(){
+		return this.restaurantes;
+	}
+
+	public void lerCsv(String path){
+		File arquivo = new File(path);
+			
+		
 	}
 
 	public static  ColecaoRestaurantes lerCsv(){
-		// Ler o arquivo csv
+		File arquivo = new File("restaurantes.csv");
+		Scanner sc = new Scanner(file);
 		int tamanho = 0;
-		Restaurante[] restaurante;
+		
+		while(scanner.hasNextLine()){
+			scanner.nextLine();
+			tamanho++; // conta quantas linhas o arquivo tem ( vai ser o tamanho do vetor de restaurantes)
+		}
+			
+		
 
-		//lendo as linhas, mandando os objetos pro array e contando as linhas
-		ColecaoRestaurantes novoObj = new ColecaoRestaurantes(tamanho, restaurante);
+		
+		ColecaoRestaurantes novoObj = new ColecaoRestaurantes(); // crio o objeto com o construtor padrão pois darei valor apenas ao atributo tamanho ( usando setter)
 
+		novoObj.setTamanho(tamanho - 1);
+		
+		sc.close();
+		return novoObj; 
 	}
 
 	
 
 
-	public static void main(String args[]){
-		lerCsv();
-	}
 }
