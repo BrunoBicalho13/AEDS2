@@ -19,21 +19,22 @@ public class Ex11{
     	}
 
 	public static String inverte(String str, int pos) {
-    		if (pos >= str.length()) { // Se chega no final da string, para
+    		if (pos < 0) { // Se chega no final da string, para
         		return "";
     		}
 
-    		return inverte(str, pos + 1) + str.charAt(pos); // chama para a proxima posição da string e concatena
+    		return  str.charAt(pos) + inverte(str, pos - 1); // chama para a proxima posição da string e concatena
 }
 
 	public static void main(String[] args){
-		String str1 = MyIO.readLine();
+		Scanner sc = new Scanner(System.in);
+		String str1 = sc.nextLine();
 		String str2 = "";
 		
 		while(compara(str1,"FIM") == 0){
-			str2 = inverte(str1,0);
-			MyIO.println(str2);
-			str1 = MyIO.readLine();
+			str2 = inverte(str1,str1.length() - 1);
+			System.out.println(str2);
+			str1 = sc.nextLine();
 		}
 	}
 

@@ -77,7 +77,7 @@ int main()
 
     while (comparaString(str1, "FIM") == 0)
     {
-        scanf(" %c ", &lixo);  // lê o '-'
+       // scanf(" %c ", &lixo);  // lê o '-'
         scanf("%s", str2);
 
         int anagrama = Anagrama(str1, str2);
@@ -88,7 +88,7 @@ int main()
         }
         else
         {
-            printf("NÃO\n");
+            printf("NAO\n");
         }
 
         scanf("%s", str1);

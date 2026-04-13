@@ -53,10 +53,10 @@ public class Ex08{
     	}
 
 	public static void main(String[] args){
-		//declarando a string    
+	   //declarando a string    
      	   String str;
-
-           str = MyIO.readLine();
+	   Scanner sc = new Scanner(System.in);			
+           str = sc.nextLine();
 	   boolean Valida;
            while(compara(str,"FIM") == 0){ // While para enquanto strings sao diferentes de FIM
             	Valida = validaString(str);
@@ -67,7 +67,7 @@ public class Ex08{
 			System.out.println("NAO");
 		}
 
-            	str = MyIO.readLine(); // escaneio a proxima string
+            	str = sc.nextLine(); // escaneio a proxima string
         }
     }
 	
