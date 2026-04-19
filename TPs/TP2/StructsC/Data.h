@@ -1,12 +1,13 @@
-Typedef struct Data{
+typedef struct Data{
 	int ano;
 	int mes;
 	int dia;
-}
+}Data;
 
-Data parse_data(char*){
-
-
+Data parse_data(char* s){
+	data d;
+	sscanf(s, "%d-%d-%d", &d.ano, &d.mes, &d.dia);
+	return d;	
 }
 
 
