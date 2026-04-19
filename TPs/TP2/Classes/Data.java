@@ -28,12 +28,31 @@ public class Data{
 		return this.dia;
 	}
 
-	public static String parseData(String s){
-		
+	public void setAno(int Ano){
+		this.ano = Ano;
 	}
 
-	public String formatar(){
-		String data = String.format("%02d/%02d/%04d",this.dia,this.mes,this.ano);
+	public void setMes(int Mes){
+		this.mes = Mes;
+	}
+
+	public void setDia(int Dia){
+		this.dia = Dia;
+	}
+
+	public static Data parseData(String s){
+		Scanner scan = new Scanner(s); 
+        	scan.useDelimiter("-");// - como delimitador
+        	int ano = scan.nextInt();
+        	int mes = scan.nextInt();
+        	int dia = scan.nextInt();
+        	scan.close();
+        	Data data = new Data(ano, mes, dia);// cria um objeto data
+        	return data;// retorna a nova data
+	}
+
+	public String formatarData(){
+		return String.format("%02d/%02d/%04d",this.dia,this.mes,this.ano);
 	}
 
 }

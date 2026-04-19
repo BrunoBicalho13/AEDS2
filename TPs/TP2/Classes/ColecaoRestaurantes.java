@@ -1,20 +1,22 @@
+import java.util.*;
+import java.io.File;
 public class ColecaoRestaurantes{
 	private int tamanho;
 	private Restaurante[] restaurantes;
 
 	ColecaoRestaurantes(){
 		this.tamanho = 0;
-		this.restaurantes = restaurantes[0];
+		this.restaurantes = null;
 	
 	}
 
-	ColecaoRestaurantes(int tamanho, Restaurante[] restaurantes){
+	ColecaoRestaurantes(int tamanho){
 		this.tamanho = tamanho;
-		this.restaurantes = restaurantes[0];
+		this.restaurantes = new Restaurante[tamanho];
 	}
 
 	public void setTamanho(int tamanho){
-		this.tamaho = tamanho;
+		this.tamanho = tamanho;
 	}
 
 	public void setRestaurante(Restaurante[] rest){
@@ -29,34 +31,46 @@ public class ColecaoRestaurantes{
 		return this.restaurantes;
 	}
 
-	public void lerCsv(String path){
-		File arquivo = new File(path);
-			
-		
+	public Restaurante pesquisarId(int id){
+		for(int i = 0; i < this.tamanho; i++){
+			if(this.restaurantes[i] != null && this.restaurantes[i].getId() == id){ //busca sequencial por Id
+				return this.restaurantes[i];
+			}
+		}
+		return null; // retorna null se não encontrar o restaurante buscado
 	}
 
-	public static  ColecaoRestaurantes lerCsv(){
-		File arquivo = new File("restaurantes.csv");
-		Scanner sc = new Scanner(file);
+	public void lerCsv(String path) throws Exception{
+		File arquivo = new File(path);
+		Scanner sc = new Scanner(arquivo);
+		
+		if(sc.hasNextLine()) // pula o cabeçalho
+			sc.nextLine();
+			
+		int i = 0;
+		while(sc.hasNextLine()){
+			String linha = sc.nextLine(); // Escaneia a string com as infos do restaurante
+			restaurantes[i] = Restaurante.parseRestaurante(linha); // guarda o restaurante no formato correto dentro do vetor
+			i++;
+		}
+	}
+
+	public static  ColecaoRestaurantes lerCsv() throws Exception{
+		File arquivo = new File("/tmp/restaurantes.csv");
+		Scanner sc = new Scanner(arquivo);
 		int tamanho = 0;
 		
-		while(scanner.hasNextLine()){
-			scanner.nextLine();
+		while(sc.hasNextLine()){
+			sc.nextLine();
 			tamanho++; // conta quantas linhas o arquivo tem ( vai ser o tamanho do vetor de restaurantes)
 		}
 			
 		
-
-		
-		ColecaoRestaurantes novoObj = new ColecaoRestaurantes(); // crio o objeto com o construtor padrão pois darei valor apenas ao atributo tamanho ( usando setter)
-
-		novoObj.setTamanho(tamanho - 1);
-		
 		sc.close();
-		return novoObj; 
+		
+		ColecaoRestaurantes novaColecao = new ColecaoRestaurantes(tamanho -1);
+
+		novaColecao.lerCsv("/tmp/restaurantes.csv");
+		return novaColecao; 
 	}
-
-	
-
-
 }

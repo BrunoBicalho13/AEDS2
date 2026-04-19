@@ -1,3 +1,4 @@
+import java.util.*;
 public class Hora{
 	private int hora;
 	private int minuto;
@@ -19,11 +20,28 @@ public class Hora{
 	}
 
 	public int getMinuto(){
-		return this.minuto
+		return this.minuto;
 	}
+
+	public void setHora(int Hora){
+		this.hora = Hora;
+	}
+
+	public void setMinuto(int Minuto){
+		this.minuto = Minuto;
+	}
+
+	public static Hora parseHora(String s){
+        	Scanner scan = new Scanner(s);
+        	scan.useDelimiter(":");// separa por :
+        	int hora = scan.nextInt();
+        	int minuto = scan.nextInt();
+        	Hora h = new Hora(hora,minuto);// criar o objeto hora
+        	return h;// retona a nova hora
+    	}
 	
 	public String formatarHora(){
-                String horario = string.format("%d : %d", this.hora, this.minuto);
+                String horario = String.format("%02d:%02d", this.hora, this.minuto);
                 return horario;
         }
 
