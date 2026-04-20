@@ -164,7 +164,7 @@ void ler_csv_colecao(Colecao_Restaurante* colecao, char* path){
 }
 
 Colecao_Restaurante* ler_csv(){
-        FILE *arq = fopen("/tmp/restaurantes.csv", "r");// abro o arquivo para leitura
+        FILE *arq = fopen("restaurantes.csv", "r");// abro o arquivo para leitura
 
         if(arq == NULL){
             printf("Erro ao abrir arquivo!");
@@ -191,7 +191,7 @@ Colecao_Restaurante* ler_csv(){
             printf("Erro ao alocar restaurante!");
             return NULL;
         }
-        ler_csv_colecao(novaCole,"/tmp/restaurantes.csv");
+        ler_csv_colecao(novaCole,"restaurantes.csv");
 
       return novaCole;
 }
@@ -205,27 +205,55 @@ int buscarId(Colecao_Restaurante* colecao, int id_buscado) {
     return -1;
 }
 
+void imprimirColecao(Colecao_Restaurante* colecao){
+	char leitura[300];
+	for(int i = 0; i < colecao->tamanho; i++){
+             printf("imprimindo\n");		 
+             formatar_restaurante(&(colecao->restaurante[i]), leitura);//fomato o restaurante e passo para o char leitura
+             printf("%s\n", leitura);//print do restaurante formatado
 
+	}
+
+
+}
+void swap(Restaurante* r1, Restaurante* r2){
+	Restaurante r3 = *r1;
+	*r1 = *r2;
+	*r2 = r3;
+}
+void Selecao(Colecao_Restaurante* colecao){
+	int cont = 0;
+	for(int i = 0; i < colecao->tamanho; i++){
+		int menor = i;
+		for(int j = (i + 1); j < colecao->tamanho; j++){
+			printf("Comparando\n");
+			if(strcmp(colecao->restaurante[i].nome,colecao->restaurante[j].nome) == 1){
+				menor = j;
+			}
+		}
+	swap(&colecao->restaurante[menor],&colecao->restaurante[i]);
+	cont++;	
+	}
+}
 int main(){
     Colecao_Restaurante* cr = ler_csv();
-    //printf("Lendo csv\n");
-    char linha[20];
+    Selecao(cr);
+    imprimirColecao(cr);	
+    /*char linha[20];
     scanf("%s", linha);//leio a linha
-    //printf("Lendo linha a primeira vez\n");	
     while(strcmp(linha, "-1") != 0){//comparo se é diferente de -1
-        //printf("Entrando no while\n");
-	int id = atoi(linha);//transformo o valor
+        int id = atoi(linha);//transformo o valor
 
         int idBuscado = buscarId(cr, id);// busca o id na lista
-        if(idBuscado != -1){//verifico se é diferete de -1
-	    //printf("Verificando ID\n");	
+        if(idBuscado != -1){//verifico se é diferente de -1
             char leitura[300];
             formatar_restaurante(&(cr->restaurante[idBuscado]), leitura);//fomato o restaurante e passo para o char leitura
             printf("%s\n", leitura);//print do restaurante formatado
         }
         scanf("%s", linha);// scan para a proxima linha
     }
-
+	
+*/	
     for (int i = 0; i < cr->tamanho; i++) {
         liberar_restaurante(&cr->restaurante[i]);//libero os vetores criado de cada posicao
     }

@@ -1,0 +1,5 @@
+id,nome,cidade,capacidade,avaliacao,tipos_cozinha,faixa_preco,horario,data_abertura,aberto
+1,Classic Palace Works,Zurich,168,3.9,churrasco;internacional,$$,11:00-20:00,2018-03-31,false
+2,Sunny Garden Studio,Sydney,133,4.8,frutos do mar;mediterranea,$,12:00-20:00,2021-03-07,false
+3,Royal Table Zone,Sydney,190,4.6,frutos do mar;mediterranea,$$$$,11:00-22:00,2019-07-04,false
+4,Grand Grill Hall 83,Madrid,194,4.7,espanhola;tapas,$$$,11:00-23:00,2021-11-20,true
