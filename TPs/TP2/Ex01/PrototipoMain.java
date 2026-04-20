@@ -314,8 +314,11 @@ class Restaurante{
 	        	String tipoStr = Arrays.toString(this.tiposCozinha);
 			tipoStr = tipoStr.replace(", ", ","); // remove as virgulas que o java coloca automaticamente
 		
-        
-		 String rest = String.format("[%d ## %s ## %s ## %d ## %.1f ## %s ## %s ## %s-%s ## %s ## %b]", this.id, this.nome,this.cidade, this.capacidade, this.avaliacao, tipoStr, this.transformaFaixaPreco(), this.horarioAbertura.formatarHora(), this.horarioFechamento.formatarHora(), this.dataAbertura.formatarData(), this.aberto);
+			double valor = this.avaliacao;                                                                             
+                     	String strAvaliacao = valor + ""; // pego o valor atual do double e coloco como string
+
+			        
+		 String rest = String.format("[%d ## %s ## %s ## %d ## %s ## %s ## %s ## %s-%s ## %s ## %b]", this.id, this.nome,this.cidade, this.capacidade, strAvaliacao, tipoStr, this.transformaFaixaPreco(), this.horarioAbertura.formatarHora(), this.horarioFechamento.formatarHora(), this.dataAbertura.formatarData(), this.aberto);
  
         	         return rest;
          	}
