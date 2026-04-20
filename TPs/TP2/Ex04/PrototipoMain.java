@@ -1,5 +1,5 @@
 import java.util.*;
-import java.io.File;
+import java.io.*;
 class Data{
 		private int ano;
            	private int mes;
@@ -293,7 +293,9 @@ class Restaurante{
                  	for(int i = 0; i < count; i++){// pego a quantidade exata de tipos
                          	tipoCozinha[i] = aux[i];// adiciono no vetor de tipoCozinha
                  	}
+			
 
+				
 			 //retorno um objeto restaurante
                  	Restaurante r = new Restaurante();
                  	r.id = id;
@@ -314,8 +316,11 @@ class Restaurante{
 	        	String tipoStr = Arrays.toString(this.tiposCozinha);
 			tipoStr = tipoStr.replace(", ", ","); // remove as virgulas que o java coloca automaticamente
 		
-        
-		 String rest = String.format("[%d ## %s ## %s ## %d ## %.1f ## %s ## %s ## %s-%s ## %s ## %b]", this.id, this.nome,this.cidade, this.capacidade, this.avaliacao, tipoStr, this.transformaFaixaPreco(), this.horarioAbertura.formatarHora(), this.horarioFechamento.formatarHora(), this.dataAbertura.formatarData(), this.aberto);
+       			double valor = this.avaliacao;                                                                             
+                     	String strAvaliacao = valor + ""; // pego o valor atual do double e coloco como string 
+
+		
+		 	String rest = String.format("[%d ## %s ## %s ## %d ## %s ## %s ## %s ## %s-%s ## %s ## %b]", this.id, this.nome,this.cidade, this.capacidade, strAvaliacao, tipoStr, this.transformaFaixaPreco(), this.horarioAbertura.formatarHora(), this.horarioFechamento.formatarHora(), this.dataAbertura.formatarData(), this.aberto);
  
         	         return rest;
          	}
@@ -396,26 +401,69 @@ class Restaurante{
           	}
 	}//fim da classe ColecaoRestaurantes
 public class PrototipoMain{		
+			
+		public static int mov = 0;
+     		public static int comp = 0;
+
+		public static void insercao(Restaurante[] rest,int n){
+			for(int i = 1; i < n; i++){
+				Restaurante tmp = rest[i];
+				mov++;
+				int j = i - 1;
+				comp++;
+				while((j >= 0) && (tmp.getCidade().compareTo(rest[j].getCidade()) < 0)){
+					rest[j + 1] = rest[j];
+					mov++;
+					j--;
+				}
+				mov++;
+				rest[j + 1] = tmp;
+			}
+		}
+
+
+
+		public static long now(){
+        		return new Date().getTime();
+    		}
+		
 		public static void main(String[] args) throws Exception{
 			Scanner sc = new Scanner(System.in);
+            		ColecaoRestaurantes cr = ColecaoRestaurantes.lerCsv();
+            		Restaurante[] r = new Restaurante[1000];
+            		int r_ordenados = 0;
 
-			ColecaoRestaurantes cr = ColecaoRestaurantes.lerCsv(); // cria a coleção para carregamos os restaurantes
+            		double inicio, fim, total_t;
 
-			String linha = sc.next();// Lê o primeiro ID da entrada        	
-		
-			while(linha.compareTo("-1") != 0){
-				int idBusca = Integer.parseInt(linha);
+            		String linha = sc.next();
+                
+            		while(linha.compareTo("-1") != 0){
+               			int id = Integer.parseInt(linha);// parse int para pegar o valor de id
+               			Restaurante aux = cr.pesquisarId(id);
+               			if(aux != null){
+                    		r[r_ordenados] = aux;
+                    		r_ordenados++;
+               			}	
+               			linha = sc.next();//leitura da proxima linha
+            		}
+            		sc.close();
+            
+            		inicio = System.nanoTime();
+            		insercao(r,r_ordenados);
+            		fim = System.nanoTime();
+  
+            		total_t = (fim - inicio)/1_000_000.0;
 
+           		
+            		for(int i = 0; i < r_ordenados; i++)
+                		System.out.println(r[i].formatar());
 
-				Restaurante r = cr.pesquisarId(idBusca);
+            		FileWriter arq = new FileWriter("892151_insercao.txt");
+            		PrintWriter gravarArq = new PrintWriter(arq);
 
-				if(r != null){
-					System.out.println(r.formatar());
-				}
+            		gravarArq.printf("892151\t Comparacoes: %d\t Movimentacao: %d\t Tempo: %.4f\n", comp, mov, total_t);
 
-				linha = sc.next();
-			}
+            		gravarArq.close();
 
-			sc.close();		
 		}
 }

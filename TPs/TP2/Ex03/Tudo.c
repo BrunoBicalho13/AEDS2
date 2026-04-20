@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include<time.h>
 	
 typedef struct Data{
     int dia;
@@ -216,48 +217,74 @@ void imprimirColecao(Colecao_Restaurante* colecao){
 
 
 }
-void swap(Restaurante* r1, Restaurante* r2){
+void swap(Restaurante* r1, Restaurante* r2, int* cont){
 	Restaurante r3 = *r1;
 	*r1 = *r2;
 	*r2 = r3;
+	*cont += 3;
 }
-void Selecao(Colecao_Restaurante* colecao){
-	int cont = 0;
-	for(int i = 0; i < colecao->tamanho; i++){
+void Selecao(Restaurante rest[], int n, int * comp, int* mov){// passo um array de restaurantes para ordenar apenas os rests necessarios
+	*comp = 0;
+	for(int i = 0; i < n - 1; i++){
 		int menor = i;
-		for(int j = (i + 1); j < colecao->tamanho; j++){
-			printf("Comparando\n");
-			if(strcmp(colecao->restaurante[i].nome,colecao->restaurante[j].nome) == 1){
+		for(int j = (i + 1); j < n; j++){
+			//printf("Comparando\n");
+			(*comp)++;
+			if(strcmp(rest[j].nome,rest[menor].nome) < 0){
 				menor = j;
 			}
 		}
-	swap(&colecao->restaurante[menor],&colecao->restaurante[i]);
-	cont++;	
+	swap(&rest[menor],&rest[i],mov);
 	}
 }
 int main(){
-    Colecao_Restaurante* cr = ler_csv();
-    Selecao(cr);
-    imprimirColecao(cr);	
-    /*char linha[20];
-    scanf("%s", linha);//leio a linha
-    while(strcmp(linha, "-1") != 0){//comparo se é diferente de -1
-        int id = atoi(linha);//transformo o valor
+	clock_t inicio, fim;
+    	double total_tempo;
 
-        int idBuscado = buscarId(cr, id);// busca o id na lista
-        if(idBuscado != -1){//verifico se é diferente de -1
-            char leitura[300];
-            formatar_restaurante(&(cr->restaurante[idBuscado]), leitura);//fomato o restaurante e passo para o char leitura
-            printf("%s\n", leitura);//print do restaurante formatado
-        }
-        scanf("%s", linha);// scan para a proxima linha
-    }
-	
-*/	
-    for (int i = 0; i < cr->tamanho; i++) {
-        liberar_restaurante(&cr->restaurante[i]);//libero os vetores criado de cada posicao
-    }
-    free(cr->restaurante);//libero o vetor de colecao restaurante
+    
+    	Colecao_Restaurante* cr = ler_csv();
+    
+    //Criando um array de restaurantes ordenados, e um int para saber a qtd de ordenados
+    	Restaurante r_ordenados[1000];
+    	int ordenados = 0;
+    	int comp = 0, mov = 0;
+    	char linha[5];
+    	scanf("%s", linha);
+    	while(strcmp(linha, "-1") != 0){//comparo se é diferente de -1
+        	int id = atoi(linha);
 
-    free(cr);//libero a colecao
+        	int id_buscado = buscarId(cr, id);// busca o id na lista
+        	if(id_buscado != -1){//verifico se é diferete de -1
+           	r_ordenados[ordenados] = cr->restaurante[id_buscado];  
+           	ordenados++;
+        	}
+        	scanf("%s", linha);// scan para a proxima linha
+    	}
+    
+    //inicio do clock + selecao
+   	inicio = clock();
+    	Selecao(r_ordenados, ordenados, &comp, &mov);
+    	fim = clock();
+    	total_tempo = ((fim - inicio) / (double)CLOCKS_PER_SEC); 
+
+    	for(int i = 0; i < ordenados; i++) {
+        	char leitura[300];
+        	formatar_restaurante(&r_ordenados[i], leitura);
+        	printf("%s\n", leitura);
+    	}
+
+    	FILE* arq_log = fopen("892151_selecao.txt", "w");
+    
+    	if(arq_log != NULL){
+        	fprintf(arq_log, "892151\tComparacoes: %d\tMovimentos: %d\tTempo: %.2lf\n", comp, mov, total_tempo);
+        	fclose(arq_log);
+    	}
+
+
+    	for (int i = 0; i < cr->tamanho; i++) {
+        	liberar_restaurante(&cr->restaurante[i]);
+    	}
+    	free(cr->restaurante);
+
+    	free(cr);
 }
