@@ -217,26 +217,37 @@ void imprimirColecao(Colecao_Restaurante* colecao){
 
 
 }
-void swap(Restaurante* r1, Restaurante* r2, int* cont){
+void swap(Restaurante* r1, Restaurante* r2){
 	Restaurante r3 = *r1;
 	*r1 = *r2;
 	*r2 = r3;
-	*cont += 3;
 }
-void Selecao(Restaurante rest[], int n, int * comp, int* mov){// passo um array de restaurantes para ordenar apenas os rests necessarios
-	*comp = 0;
+void Selecao(Restaurante rest[], int n){// passo um array de restaurantes para ordenar apenas os rests necessarios
 	for(int i = 0; i < n - 1; i++){
 		int menor = i;
 		for(int j = (i + 1); j < n; j++){
 			//printf("Comparando\n");
-			(*comp)++;
 			if(strcmp(rest[j].nome,rest[menor].nome) < 0){
 				menor = j;
 			}
 		}
-	swap(&rest[menor],&rest[i],mov);
+	swap(&rest[menor],&rest[i]);
 	}
 }
+
+int pesquisa_binaria(Restaurante *r, char* nome, int n, int *comp){
+    	int esq = 0, dir = n - 1;
+    	while (esq <= dir) {
+        	int meio = (esq + dir) / 2;
+        	int compara = strcmp(r[meio].nome, nome);
+        	(*comp)++;
+        	if (compara == 0) return meio;
+        	else if (compara < 0) esq = meio + 1;
+       	 	else dir = meio - 1;
+    	}
+    	return -1;
+}
+
 int main(){
 	clock_t inicio, fim;
     	double total_tempo;
@@ -244,39 +255,51 @@ int main(){
     
     	Colecao_Restaurante* cr = ler_csv();
     
-    //Criando um array de restaurantes ordenados, e um int para saber a qtd de ordenados
-    	Restaurante r_ordenados[1000];
-    	int ordenados = 0;
-    	int comp = 0, mov = 0;
-    	char linha[5];
+    //Criando um array de restaurantes, e um int para saber a qtd de ordenados
+    	Restaurante r[1000];
+    	int qtd = 0;
+    	int comp = 0;
+    	char linha[50];
     	scanf("%s", linha);
-    	while(strcmp(linha, "-1") != 0){//comparo se é diferente de -1
+    	while(strcmp(linha, "-1") != 0){
         	int id = atoi(linha);
 
-        	int id_buscado = buscarId(cr, id);// busca o id na lista
-        	if(id_buscado != -1){//verifico se é diferete de -1
-           	r_ordenados[ordenados] = cr->restaurante[id_buscado];  
-           	ordenados++;
+        	int id_buscado = buscarId(cr, id);
+        	if(id_buscado != -1){
+           	r[qtd] = cr->restaurante[id_buscado];  
+           	qtd++;
         	}
-        	scanf("%s", linha);// scan para a proxima linha
+        	scanf("%s", linha);
     	}
     
-    //inicio do clock + selecao
-   	inicio = clock();
-    	Selecao(r_ordenados, ordenados, &comp, &mov);
-    	fim = clock();
-    	total_tempo = ((fim - inicio) / (double)CLOCKS_PER_SEC); 
+    //selecao
+   	
+    	Selecao(r, qtd);
 
-    	for(int i = 0; i < ordenados; i++) {
-        	char leitura[300];
-        	formatar_restaurante(&r_ordenados[i], leitura);
-        	printf("%s\n", leitura);
+
+	getchar();
+    	scanf("%[^\n]", linha);
+    	getchar();
+
+    	inicio = clock();
+
+    	while(strcmp(linha, "FIM") != 0){
+        	if(pesquisa_binaria(r, linha, qtd, &comp) != -1){
+            		printf("SIM\n");
+        	}else{
+            		printf("NAO\n");
+        	}
+      		scanf("%[^\n]", linha);
+      		getchar();
     	}
 
-    	FILE* arq_log = fopen("892151_selecao.txt", "w");
+    	fim = clock();
+    	total_tempo = ((fim - inicio) / (double)CLOCKS_PER_SEC) * 1000.0;  
+
+    	FILE* arq_log = fopen("892151_binaria.txt", "w");
     
     	if(arq_log != NULL){
-        	fprintf(arq_log, "892151\tComparacoes: %d\tMovimentos: %d\tTempo: %.2lf\n", comp, mov, total_tempo);
+        	fprintf(arq_log, "892151\tComparacoes: %d\tTempo: %.2lf\n", comp, total_tempo);
         	fclose(arq_log);
     	}
 

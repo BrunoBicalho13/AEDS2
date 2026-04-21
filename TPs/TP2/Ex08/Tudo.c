@@ -237,6 +237,32 @@ void Selecao(Restaurante rest[], int n, int * comp, int* mov){// passo um array 
 	swap(&rest[menor],&rest[i],mov);
 	}
 }
+
+void quicksortRec(Restaurante rest[], int esq, int dir, int* comp, int* mov){
+	int i = esq, j = dir;
+    	double pivo = rest[(dir+esq)/2].avaliacao; // pivot no meio
+	char* pivo_nome = rest[(dir + esq) / 2].nome; // colocando o nome do pivot em uma string para facilitar a comparação de desempate
+    	while (i <= j) {
+        	while ((*comp)++ && (rest[i].avaliacao < pivo || (rest[i].avaliacao == pivo && strcmp(rest[i].nome, pivo_nome) < 0))) // conta comparações e realiza as comparações 
+			i++;
+        	while ((*comp)++ && (rest[j].avaliacao >  pivo || (rest[j].avaliacao == pivo && strcmp(rest[j].nome, pivo_nome) > 0))) 
+			j--;
+        	if (i <= j) {
+            		swap(&rest[i], &rest[j],mov);
+            		i++;
+            		j--;
+        	}	
+    	}
+    	if (esq < j)  quicksortRec(rest, esq, j,comp,mov);
+    	if (i < dir)  quicksortRec(rest, i, dir,comp,mov);
+}
+
+
+void quicksort(Restaurante rest[], int n, int* comp, int* mov) {
+    	*comp = 0;// inicializa os contadores com 0 para evitar erros
+	*mov = 0;
+	quicksortRec(rest, 0, n-1,comp,mov);
+}
 int main(){
 	clock_t inicio, fim;
     	double total_tempo;
@@ -263,7 +289,7 @@ int main(){
     
     //inicio do clock + selecao
    	inicio = clock();
-    	Selecao(r_ordenados, ordenados, &comp, &mov);
+    	quicksort(r_ordenados, ordenados, &comp, &mov);
     	fim = clock();
     	total_tempo = ((fim - inicio) / (double)CLOCKS_PER_SEC); 
 
@@ -273,7 +299,7 @@ int main(){
         	printf("%s\n", leitura);
     	}
 
-    	FILE* arq_log = fopen("892151_selecao.txt", "w");
+    	FILE* arq_log = fopen("892151_quicksort.txt", "w");
     
     	if(arq_log != NULL){
         	fprintf(arq_log, "892151\tComparacoes: %d\tMovimentos: %d\tTempo: %.2lf\n", comp, mov, total_tempo);
