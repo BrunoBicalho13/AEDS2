@@ -1,1 +1,1 @@
-892151	Comparacoes: 569	Tempo: 0.02
+892151	Comparacoes: 569	Tempo: 0.07

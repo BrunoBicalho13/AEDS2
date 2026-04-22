@@ -77,6 +77,13 @@ Restaurante* parse_restaurante(char *s){
            &r->avaliacao, tipo, preco, hora_a, hora_f,
            data_a, aberto);
 
+     
+    for(int i = 0; aberto[i] != '\0'; i++){
+        if(aberto[i] == '\r' || aberto[i] == '\n' || aberto[i] == ' ')//verifico se existe algo apos a string
+            aberto[i] = '\0';
+    }	
+
+
     r->aberto = (strcmp(aberto, "true") == 0);//verifica se o char aberto e true, se for r->aberto recebe true
     r->hora_abertura = parse_hora(hora_a);//chamada da funcao parse_hora
     r->hora_fechamento = parse_hora(hora_f);
@@ -210,7 +217,8 @@ int main(){
     Colecao_Restaurante* cr = ler_csv();
     //printf("Lendo csv\n");
     char linha[20];
-    scanf("%s", linha);//leio a linha
+
+     scanf("%s", linha);//leio a linha	
     //printf("Lendo linha a primeira vez\n");	
     while(strcmp(linha, "-1") != 0){//comparo se é diferente de -1
         //printf("Entrando no while\n");
