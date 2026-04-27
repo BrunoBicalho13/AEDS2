@@ -126,7 +126,7 @@ class Matriz {
         		for (int j = 0; j < 3; j++)
             			a.inserir(val++, i, j);
 
-    		// Fill matrix B with 10-18
+    		// Preencher matriz b
     		for (int i = 0; i < 3; i++)
         		for (int j = 0; j < 3; j++)
             			b.inserir(val++, i, j);
