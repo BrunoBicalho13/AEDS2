@@ -66,6 +66,14 @@ public class Lista{
 
 	int removerFim() throws Exception{
 		if (n == 0)
+void inserirFim(int x) throws Exception{
+ 29                 if( n>= array.length)
+ 30                         throw new Exception ("Erro!");
+ 31 
+ 32                 array[n] = x;
+ 33                 n++;
+ 34 
+ 35         }
 			throw new Exception("Erro!");
 		
 		int resp = array[--n]; // remove o número da lógica e o retorna
