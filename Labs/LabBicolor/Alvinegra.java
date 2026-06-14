@@ -71,34 +71,34 @@ public class Alvinegra {
 		// Se a arvore estiver vazia
 		if (raiz == null) {
 			raiz = new NoAN(elemento);
-//			System.out.println("Antes, zero elementos. Agora, raiz(" + raiz.elemento + ").");
+			//			System.out.println("Antes, zero elementos. Agora, raiz(" + raiz.elemento + ").");
 
 			// Senao, se a arvore tiver um elemento
 		} else if (raiz.esq == null && raiz.dir == null) {
 			if (elemento < raiz.elemento) {
 				raiz.esq = new NoAN(elemento);
-//				System.out.println("Antes, um elemento. Agora, raiz(" + raiz.elemento + ") e esq(" + raiz.esq.elemento + ").");
+				//				System.out.println("Antes, um elemento. Agora, raiz(" + raiz.elemento + ") e esq(" + raiz.esq.elemento + ").");
 			} else {
 				raiz.dir = new NoAN(elemento);
-//				System.out.println("Antes, um elemento. Agora, raiz(" + raiz.elemento + ") e dir(" + raiz.dir.elemento + ").");
+				//				System.out.println("Antes, um elemento. Agora, raiz(" + raiz.elemento + ") e dir(" + raiz.dir.elemento + ").");
 			}
 
 			// Senao, se a arvore tiver dois elementos (raiz e dir)
 		} else if (raiz.esq == null) {
 			if (elemento < raiz.elemento) {
 				raiz.esq = new NoAN(elemento);
-//				System.out.println("Antes, dois elementos(A). Agora, raiz(" + raiz.elemento + "), esq (" + raiz.esq.elemento + ") e dir(" + raiz.dir.elemento + ").");
+				//				System.out.println("Antes, dois elementos(A). Agora, raiz(" + raiz.elemento + "), esq (" + raiz.esq.elemento + ") e dir(" + raiz.dir.elemento + ").");
 
 			} else if (elemento < raiz.dir.elemento) {
 				raiz.esq = new NoAN(raiz.elemento);
 				raiz.elemento = elemento;
-//				System.out.println("Antes, dois elementos(B). Agora, raiz(" + raiz.elemento + "), esq (" + raiz.esq.elemento + ") e dir(" + raiz.dir.elemento + ").");
+				//				System.out.println("Antes, dois elementos(B). Agora, raiz(" + raiz.elemento + "), esq (" + raiz.esq.elemento + ") e dir(" + raiz.dir.elemento + ").");
 
 			} else {
 				raiz.esq = new NoAN(raiz.elemento);
 				raiz.elemento = raiz.dir.elemento;
 				raiz.dir.elemento = elemento;
-//				System.out.println("Antes, dois elementos(C). Agora, raiz(" + raiz.elemento + "), esq (" + raiz.esq.elemento + ") e dir(" + raiz.dir.elemento + ").");
+				//				System.out.println("Antes, dois elementos(C). Agora, raiz(" + raiz.elemento + "), esq (" + raiz.esq.elemento + ") e dir(" + raiz.dir.elemento + ").");
 			}
 			raiz.esq.cor = raiz.dir.cor = false;
 
@@ -106,24 +106,24 @@ public class Alvinegra {
 		} else if (raiz.dir == null) {
 			if (elemento > raiz.elemento) {
 				raiz.dir = new NoAN(elemento);
-//				System.out.println("Antes, dois elementos(D). Agora, raiz(" + raiz.elemento + "), esq (" + raiz.esq.elemento + ") e dir(" + raiz.dir.elemento + ").");
+				//				System.out.println("Antes, dois elementos(D). Agora, raiz(" + raiz.elemento + "), esq (" + raiz.esq.elemento + ") e dir(" + raiz.dir.elemento + ").");
 
 			} else if (elemento > raiz.esq.elemento) {
 				raiz.dir = new NoAN(raiz.elemento);
 				raiz.elemento = elemento;
-//				System.out.println("Antes, dois elementos(E). Agora, raiz(" + raiz.elemento + "), esq (" + raiz.esq.elemento + ") e dir(" + raiz.dir.elemento + ").");
+				//				System.out.println("Antes, dois elementos(E). Agora, raiz(" + raiz.elemento + "), esq (" + raiz.esq.elemento + ") e dir(" + raiz.dir.elemento + ").");
 
 			} else {
 				raiz.dir = new NoAN(raiz.elemento);
 				raiz.elemento = raiz.esq.elemento;
 				raiz.esq.elemento = elemento;
-//				System.out.println("Antes, dois elementos(F). Agora, raiz(" + raiz.elemento + "), esq (" + raiz.esq.elemento + ") e dir(" + raiz.dir.elemento + ").");
+				//				System.out.println("Antes, dois elementos(F). Agora, raiz(" + raiz.elemento + "), esq (" + raiz.esq.elemento + ") e dir(" + raiz.dir.elemento + ").");
 			}
 			raiz.esq.cor = raiz.dir.cor = false;
 
 			// Senao, a arvore tem tres ou mais elementos
 		} else {
-//			System.out.println("Arvore com tres ou mais elementos...");
+			//			System.out.println("Arvore com tres ou mais elementos...");
 			inserir(elemento, null, null, null, raiz);
 		}
 		raiz.cor = false;
@@ -156,8 +156,8 @@ public class Alvinegra {
 			// reestabelecer as cores apos a rotacao
 			avo.cor = false;
 			avo.esq.cor = avo.dir.cor = true;
-//			System.out.println("Reestabeler cores: avo(" + avo.elemento + "->branco) e avo.esq / avo.dir("
-//					+ avo.esq.elemento + "," + avo.dir.elemento + "-> pretos)");
+			//			System.out.println("Reestabeler cores: avo(" + avo.elemento + "->branco) e avo.esq / avo.dir("
+			//					+ avo.esq.elemento + "," + avo.dir.elemento + "-> pretos)");
 		} // if(pai.cor == true)
 	}
 
@@ -172,15 +172,9 @@ public class Alvinegra {
 				balancear(bisavo, avo, pai, i);
 			}
 		} else {
-			// Achou um 4-no: eh preciso fragmeta-lo e reequilibrar a arvore
+			// Achou um 4-no: eh preciso fragmenta-lo e reequilibrar a arvore
 			if (i.esq != null && i.dir != null && i.esq.cor == true && i.dir.cor == true) {
-				i.cor = true;
-				i.esq.cor = i.dir.cor = false;
-				if (i == raiz) {
-					i.cor = false;
-				} else if (pai.cor == true) {
-					balancear(bisavo, avo, pai, i);
-				}
+				fragmentar(bisavo, avo, pai, i);
 			}
 			if (elemento < i.elemento) {
 				inserir(elemento, avo, pai, i, i.esq);
@@ -192,8 +186,18 @@ public class Alvinegra {
 		}
 	}
 
+	private void fragmentar(NoAN bisavo, NoAN avo, NoAN pai, NoAN i) {
+		i.cor = true;
+		i.esq.cor = i.dir.cor = false;
+		if (i == raiz) {
+			i.cor = false;
+		} else if (pai.cor == true) {
+			balancear(bisavo, avo, pai, i);
+		}
+	}
+
 	private NoAN rotacaoDir(NoAN no) {
-//		System.out.println("Rotacao DIR(" + no.elemento + ")");
+		//		System.out.println("Rotacao DIR(" + no.elemento + ")");
 		NoAN noEsq = no.esq;
 		NoAN noEsqDir = noEsq.dir;
 
@@ -204,7 +208,7 @@ public class Alvinegra {
 	}
 
 	private NoAN rotacaoEsq(NoAN no) {
-//		System.out.println("Rotacao ESQ(" + no.elemento + ")");
+		//		System.out.println("Rotacao ESQ(" + no.elemento + ")");
 		NoAN noDir = no.dir;
 		NoAN noDirEsq = noDir.esq;
 
@@ -222,12 +226,12 @@ public class Alvinegra {
 		no.esq = rotacaoEsq(no.esq);
 		return rotacaoDir(no);
 	}
-	
+
 	private boolean isNoTipo4(NoAN i){
-  		 return (i.esq != null && i.dir != null && i.esq.cor == true && i.dir.cor == true);
+		return (i.esq != null && i.dir != null && i.esq.cor == true && i.dir.cor == true);
 	}
-	
-	
+
+
 	public static void main(String[] args) throws Exception{
 		Scanner sc = new Scanner(System.in);
 
@@ -246,7 +250,8 @@ public class Alvinegra {
 		arvore.inserir(20);
 
 		arvore.caminharPre();
-
+		arvore.caminharCentral();
+		arvore.caminharPos();
 	}	
 
 
