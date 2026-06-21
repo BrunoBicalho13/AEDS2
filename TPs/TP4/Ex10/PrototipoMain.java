@@ -1,10 +1,9 @@
 import java.util.*;
 import java.io.*;
 class G {
-    public static int comp = 0;
-    public static int mov = 0;
+	public static int comp = 0;
+	public static int mov = 0;
 }
-
 class Data{
 	private int ano;
 	private int mes;
@@ -362,6 +361,16 @@ class ColecaoRestaurantes{
 		return this.restaurantes;
 	}
 
+	public Restaurante buscarPorNome(String x){
+		for(int i = 0;i < tamanho; i++){
+			if(restaurantes[i].getNome().compareTo(x) == 0){
+				return restaurantes[i];
+			}
+		}
+
+		return null;
+	}
+
 	public Restaurante pesquisarId(int id){
 		for(int i = 0; i < this.tamanho; i++){
 			if(this.restaurantes[i] != null && this.restaurantes[i].getId() == id){ //busca sequencial por Id
@@ -405,207 +414,184 @@ class ColecaoRestaurantes{
 		return novaColecao;
 	}
 }//fim da classe ColecaoRestaurantes
+class NoAB{
+	public char elemento;
+	public NoAB esq, dir;
+	public No no;
 
-class No2{
-	public Restaurante elemento;
-	public No2 dir, esq;
-	public int nivel;
-
-	public No2(Restaurante x){
-		this.elemento = x;
-		this.dir = this.esq = null;
-		this.nivel = 1;
+	public NoAB() {
+		this.elemento = 0;
+		this.esq = null;
+		this.dir = null;
+		this.no = null;
 	}
 
-	public void setNivel(){
-		this.nivel = 1 + (getNivel(dir) > getNivel(esq) ? getNivel(dir) : getNivel(esq));
+	public NoAB(char elemento) {
+		this.elemento = elemento;
+		this.esq = null;
+		this.dir = null;
+		this.no = new No(elemento);
 	}
+}//fim classe NoAB
 
-	private static int getNivel(No2 no){
-		return (no == null) ? 0 : no.nivel;
-	}
 
-	public int getFatorBalanceamento(){
-		return getNivel(dir) - getNivel(esq);
-	}
-}
 
 class No{
-	public int elemento;
-	public No2 no2;
-	public No dir, esq;
+	public char elemento;
+	public NoAB raiz;
+	public boolean folha;
 
-	public No(int elemento){
+	public No(){
+		this(' ');
+	}
+
+	public No (char elemento){
 		this.elemento = elemento;
-		this.dir = this.esq = null;
-		this.no2 = null;
-	}
-}
-
-class Arvore{
-	public No raiz;
-	public Restaurante encontrado;
-	public Arvore(){
-		this.raiz = null;
+		raiz = null;
+		folha = false;
 	}
 
-	public No2 rotacaoSimplesEsq(No2 no){
-		G.mov++;
-		No2 noDir = no.dir;
-		No2 noDirEsq = noDir.esq;
-
-		noDir.esq = no;
-		no.dir = noDirEsq;
-		no.setNivel();
-		noDir.setNivel();
-		return noDir;
+	public No inserir(char x) throws Exception {
+		raiz = inserir(x, raiz);
+		return pesquisar(x);
 	}
 
-	public No2 rotacaoSimplesDir(No2 no){
-		G.mov++;
-		No2 noEsq = no.esq;
-		No2 noEsqDir = noEsq.dir;
+	private NoAB inserir(char x, NoAB i) throws Exception {
+		if (i == null) {
+			i = new NoAB(x);
 
-		noEsq.dir = no;
-		no.esq = noEsqDir;
-		no.setNivel();
-		noEsq.setNivel();
-		return noEsq;
-	}
-
-	public No2 rotacaoDuplaEsqDir(No2 no){
-		no.esq = rotacaoSimplesEsq(no.esq);
-		return rotacaoSimplesDir(no);
-	}
-
-	public No2 rotacaoDuplaDirEsq(No2 no){
-		no.dir = rotacaoSimplesDir(no.dir);
-		return rotacaoSimplesEsq(no);
-	}
-
-	private No2 balancear(No2 i){
-		int fator = i.getFatorBalanceamento();
-		if(fator == 2){
-			if(i.dir.getFatorBalanceamento() == 1 || i.dir.getFatorBalanceamento() == 0){
-				i = rotacaoSimplesEsq(i);
-			}else{
-				i = rotacaoDuplaDirEsq(i);
-			}
-		}else if(fator == -2){
-			if(i.esq.getFatorBalanceamento() == -1 || i.esq.getFatorBalanceamento() == 0){
-				i = rotacaoSimplesDir(i);
-			}else{
-				i = rotacaoDuplaEsqDir(i);
-			}
-		}
-		i.setNivel();
-		return i;
-	}
-
-	private No2 inserir(Restaurante x, No2 i){
-		G.comp++;
-		if(i == null){
-			G.mov++; 
-			i = new No2(x);
-		}else if(x.getNome().compareTo(i.elemento.getNome()) == 0){
-			System.out.println("ERRO");
-		}else if(x.getNome().compareTo(i.elemento.getNome()) < 0){
+		} else if (x < i.elemento) {
 			i.esq = inserir(x, i.esq);
-		}else{
+
+		} else if (x > i.elemento) {
 			i.dir = inserir(x, i.dir);
-		}
-		i.setNivel();
-		return balancear(i);
-	}
 
-	public void inserirNaPrimeira(int elemento) throws Exception{
-		raiz = inserirNaPrimeira(raiz, elemento);
-	}
-	private No inserirNaPrimeira(No i, int elemento) throws Exception{
-		if(i == null)
-		{
-			i = new No(elemento);
-		}
-		else if(elemento < i.elemento)
-		{
-			i.esq = inserirNaPrimeira(i.esq, elemento);
-		}
-		else if(elemento > i.elemento)
-		{
-			i.dir = inserirNaPrimeira(i.dir, elemento);
-		}
-		return i;
-	}
-
-	public void inserirNaPrimeira(Restaurante r) throws Exception{
-		inserirNaPrimeira(r, raiz);
-	}
-
-	public void inserirNaPrimeira(Restaurante r, No i) throws Exception{
-		if(i == null){
+		} else {
 			throw new Exception("Erro ao inserir!");
 		}
-		else if((r.getCapacidade() % 15) < i.elemento){
-			inserirNaPrimeira(r, i.esq);
-		}else if((r.getCapacidade() % 15) > i.elemento){
-			inserirNaPrimeira(r, i.dir);
-		}
-		else{
-			i.no2 = inserir(r, i.no2);
-		}
+
+		return i;
 	}
 
-	public boolean pesquisar(String x){
-		System.out.print("RAIZ ");
-		return pesquisarNaPrimeira(x, raiz);
+	public No pesquisar(char x){
+		return pesquisar(x, raiz);
 	}
 
-	public boolean pesquisarNaPrimeira(String x, No i){
-		boolean resp = false;
-		if (i == null) return false;
+	private No pesquisar(int x, NoAB i) {
+		No resp;
+		if (i == null) {
+			resp = null;
 
-		System.out.print("raiz ");
-		resp = pesquisarNaSegunda(x, i.no2);
+		} else if (x == i.elemento) {
+			resp = i.no;
 
-		if (!resp) {
-			System.out.print("ESQ ");
-			resp = pesquisarNaPrimeira(x, i.esq);
+		} else if (x < i.elemento) {
+			resp = pesquisar(x, i.esq);
+
+		} else {
+			resp = pesquisar(x, i.dir);
 		}
-
-		if (!resp) {
-			System.out.print("DIR ");
-			resp = pesquisarNaPrimeira(x, i.dir);
-		}
-
 		return resp;
-	}    
-	public boolean pesquisarNaSegunda(String x, No2 i){
+	}
+
+	public void setFilhoFolha(char x){
+		setFilhoFolha(x, raiz);
+	}
+	public void setFilhoFolha(char x, NoAB i){
+		if (i == null) {
+			//nada...
+
+		} else if (x == i.elemento) {
+			i.no.folha = true;
+
+		} else if (x < i.elemento) {
+			setFilhoFolha(x, i.esq);
+
+		} else {
+			setFilhoFolha(x, i.dir);
+		}
+	}
+
+	public int getN() {
+		return getN(raiz);
+	}
+	private int getN(NoAB i) {
+		int resp = 0;
+		if (i != null) {
+			resp = 1 + getN(i.esq) + getN(i.dir);
+		}
+		return resp;
+	}
+
+	public No[] getFilho(){
+		int n = getN();
+		No[] vet = new No[n];
+		getFilho(vet, 0, raiz);
+		return vet;
+	}
+
+	public int getFilho(No[] vet, int pos, NoAB i){
+		if(i != null){
+			vet[pos++] = i.no;
+			pos = getFilho(vet, pos, i.esq);
+			pos = getFilho(vet, pos, i.dir);
+		}
+		return pos;
+	}	
+}// Fim da CLasse No
+
+class ArvoreTrie{
+	public No raiz;
+
+	public ArvoreTrie(){
+		this.raiz = new No();	
+	}
+
+	public void inserir(String x) throws Exception{
+		inserir(x, raiz, 0);
+	}
+
+	private void inserir(String s, No i, int pos) throws Exception{
+		G.mov++;
+		No filho = i.pesquisar(s.charAt(pos));
+		if(filho == null){
+			filho = i.inserir(s.charAt(pos));
+			G.comp++;
+			if(pos == s.length() - 1){
+				i.setFilhoFolha(s.charAt(pos));
+			}else{
+				inserir(s, filho, pos + 1);
+			}
+		}else if(filho.folha == false && pos < s.length() - 1){
+			inserir(s, filho, pos + 1);
+		}else if(pos == s.length() - 1){
+			System.out.println("Erro ao inserir");
+		}
+	}
+
+	public boolean pesquisar(String s){
+		return pesquisar(s, raiz, 0);            
+	}
+
+	private boolean pesquisar(String s, No i, int pos){
 		boolean resp = false;
-		if(i == null){
+		No filho = i.pesquisar(s.charAt(pos));
+		G.comp++;
+		if(filho == null){
 			resp = false;
-		}else if(i.elemento.getNome().compareTo(x) == 0){
-			resp = true;
-			this.encontrado = i.elemento;
-		}else if(x.compareTo(i.elemento.getNome()) < 0){
-			//System.out.println("Debug esq " + i.elemento.formatar() + " ");
-			System.out.print("esq ");
-			resp = pesquisarNaSegunda(x, i.esq);
-		}else{
-			System.out.print("dir "); 
-			//System.out.println("Debug dir " + i.elemento.formatar() + " ");
-			resp = pesquisarNaSegunda(x, i.dir);
+		} else if(pos == s.length() - 1){
+			System.out.print(s.charAt(pos) + " ");
+			resp = (filho.folha == true);
+		} else if(pos < s.length() - 1 ){
+			System.out.print(s.charAt(pos) + " ");
+			resp = pesquisar(s, filho, pos + 1);
+		} else {
+			System.out.println("Erro ao pesquisar");
 		}
 		return resp;
 	}
+}// fim da classe ArvoreTrie
 
-	public void caminhaCentral(No i){
-		if(i != null){	
-			caminhaCentral(i.esq);
-
-			caminhaCentral(i.dir);
-		}
-	}
-}	
 
 public class PrototipoMain{		
 
@@ -615,41 +601,43 @@ public class PrototipoMain{
 		Scanner sc = new Scanner(System.in);
 		ColecaoRestaurantes cr = ColecaoRestaurantes.lerCsv();
 		String linha = sc.next();
-		Arvore resp = new Arvore();
-		double inicio;
-		double fim,total;
+		ArvoreTrie resp = new ArvoreTrie();
+
+		double inicio,fim,total;
+
 		while(linha.compareTo("-1") != 0){
 			int id = Integer.parseInt(linha);
 			Restaurante r = cr.pesquisarId(id);
 			if(r != null){
-				int mod = r.getCapacidade() % 15;
-				resp.inserirNaPrimeira(mod);
-				resp.inserirNaPrimeira(r);
+				resp.inserir(r.getNome());
 			}
 
 			linha = sc.next();
 		}
 
-		inicio = System.nanoTime();
 		sc.nextLine();
 		linha = sc.nextLine();
-		
+		inicio = System.nanoTime();
 		while(linha.compareTo("FIM") != 0){
 			if(resp.pesquisar(linha) == true){
-				System.out.print("SIM ");
-				System.out.println(resp.encontrado.formatar());
+				Restaurante r = cr.buscarPorNome(linha);
+				System.out.println("SIM " + r.formatar());
 			}else{
 				System.out.println("NAO");
 			}
+
 			linha = sc.nextLine();
 		}
+
 		fim = System.nanoTime();
-		FileWriter fl = new FileWriter("892151_hibrida_arvore_arvore.txt");
+		FileWriter fl = new FileWriter("892151_arvore_trie_arvore.txt");
 		PrintWriter gravarArq = new PrintWriter(fl);
 		total = (fim - inicio) / 1_000_000.0;
 		gravarArq.printf("892151\t Comparacoes: %d\t Movimentacao: %d\t Tempo: %.4f\n", G.comp, G.mov, total);
-		gravarArq.close();   
+		gravarArq.close();
+		//resp.caminharCentral(resp.raiz);   
 		fl.close();
-		sc.close();	
+		sc.close();
+
 	}
 }
